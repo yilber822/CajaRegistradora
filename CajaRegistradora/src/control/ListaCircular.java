@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Control;
+package control;
 
 /**
  *
@@ -162,7 +162,7 @@ public class ListaCircular {
 		Nodo actual;
 		//Se ubica en la cabeza
 		actual = cabeza;
-		if(actual.getDato().equals(dato))return true;
+		if(cabeza == null)return false;
 		//Recorre la lista mientras que no llegue a la cabeza o encuentre el valor
 		while ((actual.getSiguiente() != cabeza) && (!encontrado))
 		{
