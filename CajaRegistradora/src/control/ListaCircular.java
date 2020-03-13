@@ -5,23 +5,23 @@
  */
 package control;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Yilber
  */
 public class ListaCircular {
-	private Nodo cabeza;
-	private Nodo cola;
+	private Nodo referencia;
 	private int cantidad; 
 	
 	public ListaCircular() {
-		cabeza = null;
-		cola = null;
+		referencia = null;
 		cantidad = 0;
 	}
 	
 	public boolean checkEmpty() {
-		return cabeza == null;
+		return referencia == null;
 	}
 	
 	/**
@@ -30,7 +30,27 @@ public class ListaCircular {
 	 * @param <E>
 	 * @param dato
 	 */
-	public <E> void insertarEnCola(E dato) {
+	public <E> Nodo retornar(E dato){
+		Nodo actual;
+		Nodo retornar = null;
+		boolean encontrado = false;
+		//Se ubica en la cabeza
+		actual = referencia;
+		if(referencia == null)return null;
+				do{
+				 //Determina si el valor en el nodo actual es del mismo tipo que el dato buscado
+				 retornar = actual;
+				 encontrado = (dato.equals(retornar.getDato()));
+				 //Compara el nombre y el documento de el dato del nodo que se está recorriendo y el dato que pasa como parámetro
+				//Pasa al nodo siguiente
+				 actual = actual.getSiguiente();
+				}while ((actual.getSiguiente() != referencia && !(encontrado)));
+		
+		//Recorre la lista mientras que no llegue a la cabeza o encuentre el valor
+		return retornar;
+	}
+	
+	/*public <E> void insertarEnCola(E dato) {
 		Nodo nodo = new Nodo(dato);
 		if(!checkEmpty()) {
 			// If the list is not empty, the head is updated to point to the new node
@@ -46,7 +66,7 @@ public class ListaCircular {
 			this.cola.setSiguiente(this.cabeza);
 		}
 		this.cantidad++;
-	}
+	}*/
 	
 	
 	/**
@@ -55,22 +75,25 @@ public class ListaCircular {
 	 * The method inserts the value given to the head of the list, moving the current head to the next position 
 	 * and then modifying the tail next reference to the new head of the list
 	 */
-	public <E> void insertarEnCabeza(E dato) {
+	public <E> void insertar(E dato) {
 		Nodo nodo = new Nodo(dato);
+		Nodo busqueda = referencia;
 		//check if the list is currently empty
 		if(checkEmpty()) {
 			//set the head and the tail as the new node
-			cabeza = nodo;
-			cola = nodo;
+			referencia = nodo;
 			//set the next node of the head as itself
-			nodo.setSiguiente(cabeza);
+			nodo.setSiguiente(referencia);
 		}else {
 			//Sets the current head as the next value for the new head
-			nodo.setSiguiente(cabeza);
+			nodo.setSiguiente(referencia);
 			//sets the head as the new node
-			cabeza = nodo;
+			while(!busqueda.getSiguiente().equals(referencia)){
+				busqueda = referencia.getSiguiente();
+				referencia.getSiguiente().setSiguiente(nodo);
+			}
+			referencia = nodo;
 			//sets the next value of the tail as the new head
-			cola.setSiguiente(cabeza);
 		}
 		this.cantidad++;
 	}
@@ -160,24 +183,46 @@ public class ListaCircular {
 	public <E> boolean buscarElemento(E dato) {
 		boolean encontrado = false;
 		Nodo actual;
+		Cuenta cuentaActual;
+		Cuenta cuentaTemp;
+		Plato platoActual;
+		Plato platoTemp;
 		//Se ubica en la cabeza
-		actual = cabeza;
-		if(cabeza == null)return false;
+		actual = referencia;
+		if(referencia == null)return false;
+			if(dato instanceof Cuenta){ //Verifica si el dato en el nodo es un plato o una cuenta
+				cuentaTemp = (Cuenta)dato; 
+				
+				do{
+				 //Determina si el valor en el nodo actual es del mismo tipo que el dato buscado
+				 cuentaActual = (Cuenta)actual.getDato();
+				 //Compara el nombre y el documento de el dato del nodo que se está recorriendo y el dato que pasa como parámetro
+				 encontrado = (cuentaActual.getDocumento().equals(cuentaTemp.getDocumento()) 
+						 && cuentaActual.getNombre().equals(cuentaTemp.getNombre()));
+				//Pasa al nodo siguiente
+				 actual = actual.getSiguiente();
+				}while ((actual.getSiguiente() != referencia) && (!encontrado));
+			}else{
+				platoTemp = (Plato)dato;
+				do{
+				 //Determina si el valor en el nodo actual es del mismo tipo que el dato buscado
+				 platoActual = (Plato)actual.getDato();
+				 //Compara el nombre y el documento de el dato del nodo que se está recorriendo y el dato que pasa como parámetro
+				 encontrado = (platoActual.getNombrePlato().equals(platoTemp.getNombrePlato()));
+				//Pasa al nodo siguiente
+				 actual = actual.getSiguiente();
+				}while ((actual.getSiguiente() != referencia) && (!encontrado));
+			}
+		
 		//Recorre la lista mientras que no llegue a la cabeza o encuentre el valor
-		while ((actual.getSiguiente() != cabeza) && (!encontrado))
-		{
-		 //Determina si el valor en el nodo actual es igual al dato buscado
-		 encontrado = (actual.getSiguiente().getDato().equals(dato));
-		//Pasa al nodo siguiente
-		 actual = actual.getSiguiente();
-		}
+		
 		
 		return encontrado;
 	}
 
 	@Override
 	public String toString() {
-		return "ListaEnlazadaCircular [cabeza=" + cabeza + ", cola=" + cola + ", cantidad=" + cantidad + "]";
+		return "ListaEnlazadaCircular [Nodo referencia: " + referencia + ", Cantidad = " + cantidad + "]";
 	}
 	
 	public void limpiarLista() {
@@ -188,8 +233,8 @@ public class ListaCircular {
 	
 	public String iterarLista() {
 		String msg = this.toString()+"\n";
-		Nodo firstNode = this.cabeza;
-		Nodo current = this.cabeza;
+		Nodo firstNode = this.referencia;
+		Nodo current = this.referencia;
 		int counter = 1;
 		while(current != null) {
 			msg += String.format("%d Actual %s:Siguiente:%s\n", counter, current.toString(), current.getSiguiente().toString());

@@ -15,6 +15,7 @@ public class Cuenta {
     public String documento;
     public int mesa;
     public String pago;
+    public ListaCircular lista;
     
     public Cuenta(){
     	
@@ -22,6 +23,7 @@ public class Cuenta {
     
 	public Cuenta(String nombre, String documento, int mesa, String pago) {
 		super();
+		this.lista = new ListaCircular();
 		this.pago = pago;
 		this.nombre = nombre;
 		this.documento = documento;
@@ -75,7 +77,24 @@ public class Cuenta {
 	public void setPago(String pago) {
 		this.pago = pago;
 	}
+	
+	
+
+	public ListaCircular getLista() {
+		return lista;
+	}
+
+	public void setLista(ListaCircular lista) {
+		this.lista = lista;
+	}
+
+	/*@Override
+	public String toString() {
+		return "Cuenta [nombre=" + nombre + ", documento=" + documento + ", mesa=" + mesa + ", pago=" + pago
+				+ ", lista=" + lista + "]";
+	}*/
     
     
     
+	
 }

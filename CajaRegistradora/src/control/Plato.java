@@ -29,6 +29,38 @@ public class Plato {
         this.tipoPlato = "";
         this.precio = 0;
     }
+
+	public String getNombrePlato() {
+		return nombrePlato;
+	}
+
+	public void setNombrePlato(String nombrePlato) {
+		this.nombrePlato = nombrePlato;
+	}
+
+	public int getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public String getTipoPlato() {
+		return tipoPlato;
+	}
+
+	public void setTipoPlato(String tipoPlato) {
+		this.tipoPlato = tipoPlato;
+	}
+
+	public float getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(float precio) {
+		this.precio = precio;
+	}
     
     
 }

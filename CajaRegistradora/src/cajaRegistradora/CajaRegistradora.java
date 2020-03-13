@@ -20,9 +20,11 @@ import control.Nodo;
 public class CajaRegistradora {
 
 	public static Cuenta cuenta;
-	public static Nodo cabezaCuenta;
-	public static Nodo colaCuenta;
-	public static ListaCircular lista = new ListaCircular();
+	public static ListaCircular listaCuentas = new ListaCircular();;
+	
+	public CajaRegistradora(){
+		
+	};
     /**
      * @param args the command line arguments
      */
@@ -44,20 +46,19 @@ public class CajaRegistradora {
             	JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
             }else{
             	cuenta = new Cuenta(nombre, documento, mesa, pago);
-            	Cuenta temp = new Cuenta();
-            	
-            	if(!lista.buscarElemento(documento)){
-            		lista.insertarEnCola(documento);
+            	//JOptionPane.showMessageDialog(null, listaCuentas.iterarLista());
+            	if(!listaCuentas.buscarElemento(cuenta)){
+            		listaCuentas.insertar(cuenta);
             		JOptionPane.showMessageDialog(null, "Se ha registrado la cuenta de " + cuenta.getNombre());
-            		JOptionPane.showMessageDialog(null, lista.iterarLista());
             	}else{
             		JOptionPane.showMessageDialog(null, "El usuario ya se ha registrado");
+            		JOptionPane.showMessageDialog(null, listaCuentas.iterarLista());
             	}
-            	
-            	
+            		
             }
         	break;
         	default:
+        		System.exit(0);
         		JOptionPane.showMessageDialog(null, "Al 1");
         }
         
