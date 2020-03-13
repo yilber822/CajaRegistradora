@@ -88,11 +88,11 @@ public class Cuenta {
 		this.lista = lista;
 	}
 
-	/*@Override
+	@Override
 	public String toString() {
 		return "Cuenta [nombre=" + nombre + ", documento=" + documento + ", mesa=" + mesa + ", pago=" + pago
 				+ ", lista=" + lista + "]";
-	}*/
+	}
     
     
     
