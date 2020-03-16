@@ -22,7 +22,11 @@ public class Plato {
         this.tipoPlato = tipoPlato;
         this.precio = precio;
     }
-
+    
+    public Plato(String nombrePlato){
+    	this.nombrePlato = nombrePlato;
+    }
+    
     public Plato() {
         this.nombrePlato = "";
         this.cantidad = 0;

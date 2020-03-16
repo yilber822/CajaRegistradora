@@ -15,6 +15,10 @@ public class ListaCircular {
 	private Nodo referencia;
 	private int cantidad; 
 	
+	public Nodo getReferencia() {
+		return referencia;
+	}
+	
 	public ListaCircular() {
 		referencia = null;
 		cantidad = 0;
@@ -24,12 +28,6 @@ public class ListaCircular {
 		return referencia == null;
 	}
 	
-	/**
-	 * Appends an element by shifting the tail, so the new element will be the tail
-	 * O(9)~O(1) the insertion takes constant time, because we just update pointers
-	 * @param <E>
-	 * @param dato
-	 */
 	public <E> Nodo retornar(E dato){
 		Nodo actual;
 		Nodo retornar = null;
@@ -45,29 +43,13 @@ public class ListaCircular {
 				//Pasa al nodo siguiente
 				 actual = actual.getSiguiente();
 				}while ((actual.getSiguiente() != referencia && !(encontrado)));
-		
 		//Recorre la lista mientras que no llegue a la cabeza o encuentre el valor
-		return retornar;
-	}
-	
-	/*public <E> void insertarEnCola(E dato) {
-		Nodo nodo = new Nodo(dato);
-		if(!checkEmpty()) {
-			// If the list is not empty, the head is updated to point to the new node
-			this.cola.setSiguiente(nodo);
-			// The new node is linked to the tail to keep it circular
-			nodo.setSiguiente(this.cabeza);
-			// The tails is updated
-			this.cola = nodo;
-		}else {
-			// If the list is empty, Just set the tail and head and make it circular
-			this.cabeza = nodo;
-			this.cola = nodo;
-			this.cola.setSiguiente(this.cabeza);
+		if(!encontrado){
+			return null;
+		}else{		
+			return retornar;
 		}
-		this.cantidad++;
-	}*/
-	
+	}
 	
 	/**
 	 * @param <E>
@@ -77,107 +59,96 @@ public class ListaCircular {
 	 */
 	public <E> void insertar(E dato) {
 		Nodo nodo = new Nodo(dato);
-		Nodo busqueda = referencia;
+		Nodo buscador;
 		//check if the list is currently empty
+		try{
 		if(checkEmpty()) {
 			//set the head and the tail as the new node
 			referencia = nodo;
 			//set the next node of the head as itself
 			nodo.setSiguiente(referencia);
 		}else {
-			//Sets the current head as the next value for the new head
 			nodo.setSiguiente(referencia);
-			//sets the head as the new node
-			while(!busqueda.getSiguiente().equals(referencia)){
-				busqueda = referencia.getSiguiente();
-				referencia.getSiguiente().setSiguiente(nodo);
-			}
+			buscador = referencia;
+			while(buscador.getSiguiente() != referencia){
+				buscador = buscador.getSiguiente();
+				}
+			buscador.setSiguiente(nodo);
 			referencia = nodo;
-			//sets the next value of the tail as the new head
-		}
+		 }
 		this.cantidad++;
-	}
-	
-	public void eliminarCabeza() {
-		Nodo eliminar= null;
-		if(checkEmpty()) {
-			System.out.println("La lista se encuentra vacia");
-		}else {
-			if(cabeza==cola) {
-				cabeza=null;
-				cola=null;
-				this.cantidad = 0;
-			}
-			else {
-			Nodo actual=cola;
-			while(actual.getSiguiente()!=cabeza) {
-				actual=actual.getSiguiente();
-			}
-			
-			eliminar=actual.getSiguiente();
-			actual.setSiguiente(cabeza.getSiguiente());
-			cabeza=actual;
-				
-			}
-			this.cantidad--;
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,"Error inesperado, por favor contacte a soporte +57 3192638574");
 		}
 	}
 	
-	public void eliminarCola() {
-        Nodo eliminar = null;
-       if(checkEmpty()) {
-           System.out.println( "La lista se encuentra vacia");
-       }else {
-	       if(cabeza == cola) {
-	           cabeza = null;
-	           cola = null;
-	           this.cantidad = 0;
-	       }
-	       else {
-	           Nodo actual = cabeza;
-	           while(actual.getSiguiente() != cola) {
-	               actual = actual.getSiguiente();
-	           }
-	           eliminar = actual.getSiguiente();
-	           actual.setSiguiente(cabeza);
-	
-	           cola = actual;
-	       }
-	       this.cantidad--;
-       }
-   }
-	
-	public <E> void eliminarElemento(E dato) {
-		//Si esta vacia 
+	public <E> void eliminarElemento(String dato) {
+		boolean encontrado = false;
+		Nodo buscador;
+		Nodo salida;
+		Plato platoActual;
+		buscador = referencia;
 		if(checkEmpty()) {
-			System.out.println("Lista Vacia");
-		}else {
-			//Empezar con la cabeza
-			Nodo inicio=this.cabeza;
-			Nodo actual=this.cabeza;
-			Nodo siguiente=this.cabeza.getSiguiente();
-			do {//comparar si es el dato que busco
-				if(siguiente.getDato().equals(dato)) {
-					
-					if(cantidad>1) {
-						//conectar el actual con el que va despues del siguiente asi siguiente se pierde
-						actual.setSiguiente(actual.getSiguiente().getSiguiente());
-						cantidad--;
-						if(actual.getSiguiente()==inicio) {
-							break;
-						}
-					}else {
-						cantidad--;
-						this.cabeza=null;
-						this.cola=null;
-						break;
+			JOptionPane.showMessageDialog(null, "Usted no tiene platos en su cuenta");
+		}else{
+			if(cantidad == 1){ //CASO 1 EN EL QUE SÓLO HAY 1 ELEMENTO
+				platoActual = (Plato)buscador.getDato();
+				if(platoActual.getNombrePlato().equals(dato)){
+					referencia = null;
+					cantidad = 0;
+				}else{
+					JOptionPane.showMessageDialog(null, "El plato que desea eliminar no se encuentra registrado");
+				}
+			}else					//FIN DEL CASO 1 
+			if(cantidad == 2){     //CASO 2 EN EL QUE HAY 2 ELEMENTOS
+				platoActual = (Plato)buscador.getDato();
+				if(platoActual.getNombrePlato().equals(dato)){
+					buscador.getSiguiente().setSiguiente(buscador.getSiguiente());
+					referencia = buscador.getSiguiente();
+					buscador.setSiguiente(null);
+					cantidad --;
+				}else{
+					platoActual = (Plato)buscador.getSiguiente().getDato();
+					if(platoActual.getNombrePlato().equals(dato)){
+						buscador.setSiguiente(null);
+						referencia.setSiguiente(referencia);
+						cantidad --;
+					}else{ 
+						JOptionPane.showMessageDialog(null, "El plato que desea eliminar no se encuentra registrado");
 					}
 				}
-				//continuar
-				actual=actual.getSiguiente();
-				siguiente=actual.getSiguiente();			
-			}while(actual!=inicio);
+			}					//FIN DEL CASO 2
+			if(cantidad > 2){   //CASO 3 MÁS DE 2
+				platoActual = (Plato)referencia.getDato();
+				if(platoActual.getNombrePlato().equals(dato)){
+					while(buscador.getSiguiente() != referencia){
+						buscador = buscador.getSiguiente();
+					}
+					buscador.setSiguiente(referencia.getSiguiente());
+					referencia.setSiguiente(null);
+					referencia = buscador.getSiguiente();
+					cantidad --;
+				}else{
+					platoActual = (Plato)buscador.getSiguiente().getDato();
+					encontrado = false;
+					while(buscador.getSiguiente() != referencia && !encontrado){
+						encontrado = platoActual.getNombrePlato().equals(dato);
+						if(!encontrado){
+							buscador.setSiguiente(buscador);
+						}
+					}
+					if(encontrado){
+						Nodo borrar = buscador.getSiguiente();
+						buscador.setSiguiente(buscador.getSiguiente().getSiguiente());
+						borrar.setSiguiente(null);
+						cantidad --;
+					}else{
+						JOptionPane.showMessageDialog(null, "El plato que desea eliminar no se encuentra registrado");
+					}
+				}
+			}
 		}
+		
 	}
 	
 	public <E> boolean buscarElemento(E dato) {
@@ -226,11 +197,14 @@ public class ListaCircular {
 	}
 	
 	public void limpiarLista() {
-		this.cabeza = null;
-		this.cola = null;
+		this.referencia = null;
 		this.cantidad = 0;
 	}
-	
+
+	public int getCantidad() {
+		return cantidad;
+	}
+
 	public String iterarLista() {
 		String msg = this.toString()+"\n";
 		Nodo firstNode = this.referencia;
